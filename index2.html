@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emotion-Based Support</title>
+    <style>
+      /* Styling remains the same, improved for better responsiveness */
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #343a40;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-image: url(background-content-recomendate.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed; /* Keeps background fixed while allowing scrolling */
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+        border-radius: 15px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        backdrop-filter: blur(
+          10px
+        ); /* Optional: Adds a blur effect for a glassmorphism look */
+      }
+
+      header {
+        text-align: center;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e9ecef;
+      }
+
+      header h1 {
+        color: #28a745;
+        font-size: 2.5rem;
+      }
+
+      .section {
+        margin: 30px 0;
+      }
+
+      h2 {
+        color: #28a745;
+        font-size: 1.8rem;
+      }
+
+      .emotion-display {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #17a2b8;
+      }
+
+      .recommendation-display {
+        font-size: 1.2rem;
+        color: #495057;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .media-display {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        justify-items: center;
+      }
+
+      .media-display iframe,
+      .media-display img {
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      .tool-display {
+        text-align: center;
+        font-size: 1rem;
+        margin-top: 20px;
+      }
+
+      .tool-display a {
+        color: #17a2b8;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.3s ease;
+      }
+
+      .tool-display a:hover {
+        color: #0056b3;
+        text-decoration: underline;
+      }
+
+      .feedback-section {
+        margin-top: 30px;
+      }
+
+      .feedback-section textarea {
+        width: 100%;
+        height: 100px;
+        padding: 12px;
+        font-size: 1rem;
+        border: 2px solid #e9ecef;
+        border-radius: 5px;
+        resize: none;
+        transition: border-color 0.3s ease;
+      }
+
+      .feedback-section textarea:focus {
+        border-color: #17a2b8;
+        outline: none;
+      }
+
+      .buttons {
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      button {
+        background-color: #28a745;
+        color: white;
+        padding: 12px 24px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin: 10px;
+      }
+
+      button:hover {
+        background-color: #218838;
+      }
+
+      @media (max-width: 600px) {
+        header h1 {
+          font-size: 2rem;
+        }
+
+        .media-display {
+          grid-template-columns: 1fr;
+        }
+
+        .emotion-display,
+        .recommendation-display {
+          font-size: 1.2rem;
+        }
+
+        button {
+          padding: 10px 20px;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Emotion-Based Support</h1>
+      </header>
+
+      <div class="section emotion-display">
+        <h2>Detected Emotion</h2>
+        <div id="emotionDisplay" class="emotion"></div>
+      </div>
+
+      <div class="section recommendation-display">
+        <h2>Our Recommendation</h2>
+        <div id="recommendationDisplay"></div>
+      </div>
+
+      <div class="section media-display" id="mediaDisplay"></div>
+
+      <div class="section tool-display" id="toolDisplay"></div>
+
+      <div class="section feedback-section">
+        <h2>Feedback</h2>
+        <p>Did this help? Share your thoughts below:</p>
+        <textarea
+          id="feedbackInput"
+          placeholder="Enter your feedback here..."
+          aria-label="Feedback"
+        ></textarea>
+      </div>
+
+      <div class="buttons">
+        <button onclick="submitFeedback()">Submit Feedback</button>
+        <button onclick="goBack()">Back to Capture</button>
+      </div>
+    </div>
+
+    <script>
+      const recommendations = {
+        Happy: {
+          text: "Keep spreading positivity! Here's a fun dance tutorial to keep the joy alive.",
+          video: "https://www.youtube.com/embed/lFcSrYw-ARY",
+          image: "https://sl.bing.net/clABNq5j2JM",
+          tool: "<a href='https://www.gratitude.com' target='_blank'>Gratitude Journal App</a>",
+        },
+        Sad: {
+          text: "It's okay to feel sad sometimes. Here's something to uplift your mood.",
+          video: "https://www.youtube.com/embed/1yonmuNmEA0",
+          image: "https://via.placeholder.com/300?text=Cheer+Up",
+          tool: "<a href='https://www.psychologytoday.com/us/blog/click-here-happiness' target='_blank'>Mindfulness Exercises</a>",
+        },
+      };
+
+      const emotion = localStorage.getItem("emotion");
+      const emotionDisplay = document.getElementById("emotionDisplay");
+      const recommendationDisplay = document.getElementById(
+        "recommendationDisplay"
+      );
+      const mediaDisplay = document.getElementById("mediaDisplay");
+      const toolDisplay = document.getElementById("toolDisplay");
+
+      if (emotion) {
+        const recommendation = recommendations[emotion];
+        emotionDisplay.textContent = `Detected Emotion: ${emotion}`;
+
+        if (recommendation) {
+          recommendationDisplay.innerHTML = recommendation.text;
+          mediaDisplay.innerHTML = `
+          <iframe src="${recommendation.video}" allowfullscreen></iframe>
+          <img src="${recommendation.image}" alt="${emotion} Media" />
+        `;
+          toolDisplay.innerHTML = `Helpful Tool: ${recommendation.tool}`;
+        } else {
+          recommendationDisplay.textContent =
+            "No specific recommendation available.";
+          mediaDisplay.innerHTML = `<p>No media available for the detected emotion.</p>`;
+          toolDisplay.innerHTML = "";
+        }
+      } else {
+        emotionDisplay.textContent = "No emotion detected.";
+        recommendationDisplay.textContent =
+          "Unable to determine recommendations.";
+      }
+
+      function goBack() {
+        window.location.href = "index.html";
+      }
+
+      function submitFeedback() {
+        const feedback = document.getElementById("feedbackInput").value.trim();
+        if (feedback) {
+          const thankYouMessage = document.createElement("p");
+          thankYouMessage.textContent = "Thank you for your feedback!";
+          thankYouMessage.style.color = "green";
+          document
+            .querySelector(".feedback-section")
+            .appendChild(thankYouMessage);
+        } else {
+          alert("Please enter your feedback before submitting.");
+        }
+      }
+    </script>
+  </body>
+</html>

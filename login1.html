@@ -1,0 +1,98 @@
+<!DOCTYPE html> 
+<head>
+    <title>
+        this is my login page
+    </title>
+<style>
+
+body {
+        font-family: "Arial", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #d8e5bc;
+        border: 2px solid black;
+      }
+   
+      .container{
+        display: flex;
+        border: 2px solid black;
+        width: 100%;
+        max-width: 1000px;
+       justify-content: center;
+       overflow: hidden;
+      }
+      
+      .left
+      {
+        flex: 1;
+        padding-left:3rem;
+        background-color: #d8e5bc;
+
+      }
+      .tabcont{
+        display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;        
+    }
+
+       .logintab{
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 1rem;
+        
+
+       }
+
+</style>    
+</head>
+
+<body>
+<div class="container">
+    <div class="left">
+        <div class="formd">
+            <div class="tabcont">
+                
+                <div class="logintab">
+                    <label for="logintab active" >Login form</label>
+                </div>
+                
+                <div class="signuptag">
+                    <label for="signuptag" >sign up</label>
+                </div>
+                  
+
+            </div>
+        </div>
+        
+        <form class="login_form">
+                <div class="formd">
+                    <label for="email">Email
+                        <input type="email" placeholder="enter mail adress" required>
+                    </label>
+                </div>   
+                
+                <div class="formd">
+                    <label for="password">password
+                        <input type="password" placeholder="enter your password" required>
+                    </label>
+                 </div>   
+                    
+                <div class="formd" >
+                    <button class="submit" >log in</button>
+                </div>
+
+            </form>
+       
+
+
+
+
+
+    </div>
+</div>
+
+</body>
+
+</html>

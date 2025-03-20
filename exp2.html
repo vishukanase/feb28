@@ -1,0 +1,174 @@
+<!DOCTYPE html> 
+<head>
+    <title>
+        this is my login page
+    </title>
+<style>
+
+body {
+        font-family: "Arial", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #d8e5bc;
+        border: 2px solid black;
+      }
+   
+      .container{
+        display: flex;
+        border: 2px solid black;
+        width: 100%;
+        max-width: 1000px;
+       justify-content: center;
+       box-sizing: border-box;
+       flex-wrap: wrap;
+    }
+    
+    .left
+    {
+        flex: 1;
+        padding-left:3rem;
+        background-color: #d8e5bc;
+        
+      }
+      .tabcont{
+          display: flex;
+        justify-content: center;
+        margin-bottom: 1rem;        
+    }
+    
+    .logintab{
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        color: green;
+
+        background-color: white;
+        
+       }
+     
+       .signuptag{
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        color: green;
+        background-color: white;
+    
+       }
+
+       .logintab:hover{
+        background-color: rgb(113, 243, 124);
+        border: 1px solid green;
+    }
+    
+    
+    .signuptag:hover{
+        background-color: rgb(113, 243, 124);
+        border: 1px solid green;
+       }
+
+       .formd  label {
+        display: block;
+        color: gray;
+        font-weight: bold;
+        margin-bottom: 2rem;
+       }
+
+   
+  
+        .formd input{
+            width: 80%;
+            padding: 10px ;
+            border-radius: 5px;
+            font-size: 1rem;
+            padding-right: 20px;
+        }
+  
+#email1{
+    display: block;
+}
+
+ .btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    padding-bottom: 3rem;      
+ }
+ .btn button{
+    width: 30%;
+    height: 120%;
+    font-size: 20px;
+  border-radius: 10px;
+}
+
+.btn button:hover{
+    background-color: greenyellow;
+    cursor: pointer;
+}
+</style>    
+
+</head>
+
+<body>
+<div class="container">
+    <div class="left">
+            <div class="tabcont">
+                
+                <div class="logintab">
+                    <label for="logintab active" >Login form</label>
+                </div>
+                
+                <div class="signuptag">
+                    <label for="signuptag" >sign up</label>
+                </div>
+                  
+
+        </div>
+        
+        <form class="login_form">
+                <div class="formd">
+                    <label for="email" id="email1">End Email 
+                        <input type="email" placeholder="enter mail adress" required>
+                    </label>
+                </div>   
+                
+                <div class="formd">
+                    <label for="password">password
+                        <input type="password" placeholder="enter your password" required>
+                    </label>
+                 </div>   
+                    
+                <div class="formd" >
+                    <div class="btn">
+
+                        <button class="submit"  >log in</button>
+                    </div>
+                </div>
+
+
+  
+
+            </form>
+       
+
+
+
+
+
+    </div>
+  
+    
+
+
+    <div class="right">
+
+    </div>
+</div>
+
+</body>
+
+</html>

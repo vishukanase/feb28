@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webcam Face Capture</title>
+    <style>
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url("camera-back.png");
+        background-size: 70%;
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        text-align: center;
+        padding: 0 20px;
+      }
+
+      .container {
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 600px;
+      }
+
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #d65252;
+      }
+
+      video {
+        display: block;
+        margin: 20px auto;
+        border-radius: 10px;
+        border: 5px solid #1b1b1b;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        padding: 15px 30px;
+        font-size: 1.1rem;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: transform 0.3s, background-color 0.3s;
+        width: 100%;
+        margin-top: 20px;
+      }
+
+      button:hover {
+        background-color: #39a839;
+        transform: scale(1.05);
+      }
+
+      button:focus {
+        outline: none;
+      }
+
+      #loader {
+        display: none;
+        font-size: 1.2rem;
+        color: #333;
+        margin-top: 10px;
+      }
+
+      .message,
+      .emotion {
+        margin-top: 15px;
+        font-size: 1.1rem;
+      }
+
+      .emotion {
+        font-weight: bold;
+        font-size: 1.5rem;
+        color: #4caf50;
+      }
+
+      .error {
+        color: red;
+      }
+
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        video {
+          width: 100%;
+          height: auto;
+        }
+
+        button {
+          font-size: 1rem;
+          padding: 12px 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Capture Your Face</h1>
+      <video id="webcam" autoplay playsinline width="480" height="360"></video>
+      <canvas id="canvas" width="480" height="480" style="display: none"></canvas>
+      <button id="captureButton">Capture Face</button>
+      <div id="loader" class="message">Processing...</div>
+      <div id="message" class="message"></div>
+    </div>
+
+    <script>
+      const video = document.getElementById("webcam");
+      const canvas = document.getElementById("canvas");
+      const context = canvas.getContext("2d");
+      const captureButton = document.getElementById("captureButton");
+      const loader = document.getElementById("loader");
+      const message = document.getElementById("message");
+
+      // Access the user's webcam
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then((stream) => {
+          video.srcObject = stream;
+        })
+        .catch((err) => {
+          message.textContent = "Error accessing the webcam.";
+          message.classList.add("error");
+          console.error("Webcam error:", err);
+        });
+
+      captureButton.addEventListener("click", () => {
+        loader.style.display = "block"; // Show loader
+        message.textContent = ""; // Clear previous messages
+
+        // Capture current frame from the webcam
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = canvas.toDataURL("image/png");
+
+        // Send captured image to backend
+        fetch("http://127.0.0.1:5000/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: imageData }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            loader.style.display = "none"; // Hide loader
+
+            if (data.results && data.results.length > 0) {
+              const detectedEmotion = data.results[0].emotion; // Get first face's emotion
+              localStorage.setItem("emotion", detectedEmotion); // Store emotion locally
+
+              // Redirect to index2.html with emotion as a query parameter
+              window.location.href = `index2.html?emotion=${encodeURIComponent(
+                detectedEmotion
+              )}`;
+            } else {
+              message.textContent =
+                data.message || "No face detected or error in detection.";
+              message.classList.add("error");
+            }
+          })
+          .catch((error) => {
+            loader.style.display = "none"; // Hide loader
+            message.textContent = "An error occurred.";
+            message.classList.add("error");
+            console.error("Error:", error);
+          });
+      });
+    </script>
+  </body>
+</html>

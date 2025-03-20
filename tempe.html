@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- <video ></video> -->
+    <video id="webcam" autoplay playsinline width="480" height="360"></video>
+    <canvas id="canvas" width="480" height="480" style="display: none"></canvas>
+    <button id="captureButton">Capture Face</button>
+  </body>
+  <script>
+    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+      video.srcObject = stream;
+    });
+
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const imageData = canvas.toDataURL("image/png");
+  </script>
+</html>
